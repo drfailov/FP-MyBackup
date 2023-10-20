@@ -1,0 +1,67 @@
+﻿<Window x:Class="FP_MyBackup.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FP_MyBackup"
+        mc:Ignorable="d"
+        Title="FP MyBackup" Height="445" Width="852" Icon="/ic_main.png" MinWidth="730" MinHeight="300">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Right">
+            <Button x:Name="button_analyze" ToolTip="Відкрити провідник для вибору папки з якої буде робитись копія" Padding="1,1,1,1" Margin="10,10,10,10">
+                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                    <Image Height="20" Width="20" Source="/ic_serach.png" Margin="0,0,5,0"/>
+                    <Label Content="Аналізувати папки" Padding="0,0,0,0"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="10,10,10,10">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="/ic_main.png" Width="25" Height="25" RenderTransformOrigin="-4.275,0.574" Margin="0,0,10,0"/>
+                    <StackPanel>
+                        <Label Content="Основна папка" Padding="0,0,0,0" FontSize="14"/>
+                        <Label Content="До цієї папки не буде внесено жодних змін. Вміст цієї папки буде скопійовано в папку копії." Padding="0,0,0,0" FontSize="8" Opacity="0.5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <TextBox x:Name="textbox_source_path" TextWrapping="Wrap" Text="Шлях не обрано" Width="350" Margin="0,0,10,0" VerticalContentAlignment="Center" Foreground="#FF595959" Focusable="False"/>
+                            <Button x:Name="button_select_source_folder" ToolTip="Відкрити провідник для вибору папки з якої буде робитись копія" HorizontalAlignment="Left" VerticalAlignment="Center" Click="button_select_source_folder_Click">
+                                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                                    <Image Height="15" Width="15" Source="/ic_open.png" Margin="0,0,5,0"/>
+                                    <Label Content="Обрати" Padding="0,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Margin="10,10,10,10">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Image Source="/ic_external_drive.png" Width="25" Height="25" RenderTransformOrigin="-4.275,0.574" Margin="0,0,10,0"/>
+                    <StackPanel>
+                        <Label Content="Папка копії" Padding="0,0,0,0" FontSize="14"/>
+                        <Label Content="До цієї папки буде скопійовано вміст основної папки. Дані в цій папці які відрізнятимуться від даних в основній папці - не збережуться." Padding="0,0,0,0" FontSize="8" Opacity="0.5"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                            <TextBox x:Name="textbox_destination_path" TextWrapping="Wrap" Text="Шлях не обрано" Width="350" Margin="0,0,10,0" VerticalContentAlignment="Center" Foreground="#FF595959" Focusable="False"/>
+                            <Button x:Name="button_select_destination_folder" ToolTip="Відкрити провідник для вибору папки в яку буде робитись копія. Файли в цій папці будуть змінені!" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                                    <Image Height="15" Width="15" Source="/ic_open.png" Margin="0,0,5,0"/>
+                                    <Label Content="Обрати" Padding="0,0,0,0"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <Label x:Name="label_status" Content="Готовий."/>
+        </StackPanel>
+        <Grid Panel.ZIndex="0" DockPanel.Dock="Right">
+            <DataGrid x:Name="dataDable" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="10,10,10,10"/>
+
+        </Grid>
+
+
+    </DockPanel>
+</Window>
