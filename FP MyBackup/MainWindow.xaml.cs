@@ -28,11 +28,19 @@ namespace FP_MyBackup
         private void button_select_source_folder_Click(object sender, RoutedEventArgs e)
         {
             FolderPicker dlg = new FolderPicker();
-            //dlg.InputPath = @"c:\windows\system32";
             if (dlg.ShowDialog() == true)
             {
-                //MessageBox.Show(dlg.ResultPath);
                 textbox_source_path.Text = dlg.ResultPath;
+            }
+        }
+
+        private void button_select_destination_folder_Click(object sender, RoutedEventArgs e)
+        {
+
+            FolderPicker dlg = new FolderPicker();
+            if (dlg.ShowDialog() == true)
+            {
+                textbox_destination_path.Text = dlg.ResultPath;
             }
         }
     }

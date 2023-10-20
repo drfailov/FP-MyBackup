@@ -42,7 +42,7 @@
                         <Label Content="До цієї папки буде скопійовано вміст основної папки. Дані в цій папці які відрізнятимуться від даних в основній папці - не збережуться." Padding="0,0,0,0" FontSize="8" Opacity="0.5"/>
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
                             <TextBox x:Name="textbox_destination_path" TextWrapping="Wrap" Text="Шлях не обрано" Width="350" Margin="0,0,10,0" VerticalContentAlignment="Center" Foreground="#FF595959" Focusable="False"/>
-                            <Button x:Name="button_select_destination_folder" ToolTip="Відкрити провідник для вибору папки в яку буде робитись копія. Файли в цій папці будуть змінені!" HorizontalAlignment="Left" VerticalAlignment="Center">
+                            <Button x:Name="button_select_destination_folder" ToolTip="Відкрити провідник для вибору папки в яку буде робитись копія. Файли в цій папці будуть змінені!" HorizontalAlignment="Left" VerticalAlignment="Center" Click="button_select_destination_folder_Click">
                                 <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
                                     <Image Height="15" Width="15" Source="/ic_open.png" Margin="0,0,5,0"/>
                                     <Label Content="Обрати" Padding="0,0,0,0"/>
