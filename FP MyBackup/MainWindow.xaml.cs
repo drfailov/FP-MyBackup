@@ -674,6 +674,7 @@ namespace FP_MyBackup
                         {
                             if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_delete.png"))
                             {
+                                File.SetAttributes(actionsList[i].CopyPath, FileAttributes.Normal);
                                 File.Delete(actionsList[i].CopyPath);
                                 setSelected(i, false);
                             }
