@@ -435,6 +435,10 @@ namespace FP_MyBackup
                 {//check directory
                     string originalAddress = sDir;
                     string copyAddress = sDir.Replace(originalFolder, copyFolder);
+                    if (originalAddress.Length > 230) //deal with long path:   add \\?\
+                        originalAddress = "\\\\?\\" + originalAddress;
+                    if (copyAddress.Length > 230) //deal with long path:   add \\?\
+                        copyAddress = "\\\\?\\" + copyAddress;
                     if (!Directory.Exists(copyAddress) && Directory.Exists(originalAddress))
                     {
                         string copyDate = ""; //Directory.GetCreationTime(copyAddress).ToString();
@@ -470,6 +474,10 @@ namespace FP_MyBackup
                     {
                         string originalAddress = f;
                         string copyAddress = f.Replace(originalFolder, copyFolder);
+                        if (originalAddress.Length > 230) //deal with long path:   add \\?\
+                            originalAddress = "\\\\?\\" + originalAddress;
+                        if (copyAddress.Length > 230) //deal with long path:   add \\?\
+                            copyAddress = "\\\\?\\" + copyAddress;
                         if (!File.Exists(copyAddress) && File.Exists(originalAddress))
                         {
                             string copyDate = ""; //Directory.GetLastWriteTime(copyAddress).ToString();
@@ -544,6 +552,10 @@ namespace FP_MyBackup
                     {
                         string copyAddress = f;
                         string originalAddress = f.Replace(copyFolder, originalFolder);
+                        if (originalAddress.Length > 230) //deal with long path:   add \\?\
+                            originalAddress = "\\\\?\\" + originalAddress;
+                        if (copyAddress.Length > 230) //deal with long path:   add \\?\
+                            copyAddress = "\\\\?\\" + copyAddress;
                         if (File.Exists(copyAddress) && !File.Exists(originalAddress))
                         {
                             string copyDate = File.GetCreationTime(copyAddress).ToString();
@@ -573,6 +585,10 @@ namespace FP_MyBackup
                 try{//check directory
                     string copyAddress = sDir;
                     string originalAddress = sDir.Replace(copyFolder, originalFolder);
+                    if (originalAddress.Length > 230) //deal with long path:   add \\?\
+                        originalAddress = "\\\\?\\" + originalAddress;
+                    if (copyAddress.Length > 230) //deal with long path:   add \\?\
+                        copyAddress = "\\\\?\\" + copyAddress;
                     if (Directory.Exists(copyAddress) && !Directory.Exists(originalAddress))
                     {
                         addItemToGrid(
@@ -669,7 +685,6 @@ namespace FP_MyBackup
                 for (int i = 0; i < actionsList.Count && cont; i++)
                 {
                     if (actionsList[i].Doable && actionsList[i].Selected) {
-                        //do smth
                         try
                         {
                             if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_delete.png"))
@@ -685,6 +700,7 @@ namespace FP_MyBackup
                             }
                             if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_edit.png"))
                             {
+                                File.SetAttributes(actionsList[i].CopyPath, FileAttributes.Normal);
                                 File.Delete(actionsList[i].CopyPath);
                                 File.Copy(actionsList[i].MainPath, actionsList[i].CopyPath);
                                 setSelected(i, false);
