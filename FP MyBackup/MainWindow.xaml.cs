@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ namespace FP_MyBackup
         string originalFolder, copyFolder;
         Thread analyzeThread = null;
         Thread syncThread = null;
+        bool cont = false;
 
 
 
@@ -36,6 +38,7 @@ namespace FP_MyBackup
                 textbox_destination_path.Text = MyIni.Read("destination_folder");
             }
             actionsGrid.ItemsSource = actionsList;
+            Title += "   (v" + new FileInfo(Assembly.GetExecutingAssembly().Location).LastWriteTime.ToString("yyyy.MM.dd") + ")";
         }
 
         private void button_select_source_folder_Click(object sender, RoutedEventArgs e)
@@ -64,9 +67,10 @@ namespace FP_MyBackup
         {
             originalFolder = textbox_source_path.Text;
             copyFolder = textbox_destination_path.Text;
-            if (copyFolder.Contains(textbox_source_path.Text) || textbox_source_path.Text.Contains(copyFolder))
+
+            if (textbox_source_path.Text.Length == 0 || textbox_source_path.Text.Equals("Шлях не обрано"))
             {
-                actionsList.Add(new Action { Doable = false, ActionIcon = "ic_error.png", Filename = "Шляхи вкладені, потрібно обрати не вкладені папки." });
+                actionsList.Add(new Action { Doable = false, ActionIcon = "ic_error.png", Filename = "Шлях до основної папки не обрано. Оберіть шлях до основної папки." });
                 return false;
             }
             if (copyFolder.Length == 0 || copyFolder.Equals("Шлях не обрано"))
@@ -74,9 +78,9 @@ namespace FP_MyBackup
                 actionsList.Add(new Action { Doable = false, ActionIcon = "ic_error.png", Filename = "Шлях до папки копії не обрано. Оберіть шлях до папки копії." });
                 return false;
             }
-            if (textbox_source_path.Text.Length == 0 || textbox_source_path.Text.Equals("Шлях не обрано"))
+            if (copyFolder.Contains(textbox_source_path.Text) || textbox_source_path.Text.Contains(copyFolder))
             {
-                actionsList.Add(new Action { Doable = false, ActionIcon = "ic_error.png", Filename = "Шлях до основної папки не обрано. Оберіть шлях до основної папки." });
+                actionsList.Add(new Action { Doable = false, ActionIcon = "ic_error.png", Filename = "Шляхи вкладені, потрібно обрати не вкладені папки." });
                 return false;
             }
             if (!Directory.Exists(textbox_source_path.Text))
@@ -95,8 +99,11 @@ namespace FP_MyBackup
         private void button_analyze_Click(object sender, RoutedEventArgs e)
         {
             actionsList.Clear();
-            checkPaths();
+            if (!checkPaths())
+                return;
+            cont = true;
 
+            addItemToGrid("ic_info.png", "Аналіз запущено...");
             analyzeThread = new Thread(() => runAnalyzeAsync());
             analyzeThread.Start();
         }
@@ -116,8 +123,20 @@ namespace FP_MyBackup
             {
                 analyzeThread = null;
                 unlockButtons();
+                addItemToGrid("ic_info.png", "Аналіз завершено.");
+                if (!cont)
+                    addItemToGrid("ic_info.png", "Перервано користувачем.");
+                else if (!hasDoableActions())
+                    addItemToGrid("ic_info.png", "Відмінностей не виявлено, синхронізація не потрібна.");
                 updateStatusLineCounters();
             }
+        }
+        private bool hasDoableActions()
+        {
+            for (int i = 0; i < actionsList.Count; i++)
+                if (actionsList[i] != null && actionsList[i].Doable)
+                    return true;
+            return false;
         }
         void scrollDownGrid()
         {
@@ -169,7 +188,7 @@ namespace FP_MyBackup
             string copyPath, long copySize, String copyDate, 
             string mainPath, long mainSize, string mainDate)
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 try
                 {
@@ -197,14 +216,14 @@ namespace FP_MyBackup
 
         void refreshGrid()
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 CollectionViewSource.GetDefaultView(actionsGrid.ItemsSource).Refresh();
             }));
         }
         void updateStatusLine(String text)
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 label_status.Content = text;
             }));
@@ -241,8 +260,8 @@ namespace FP_MyBackup
                             fileCopySizeSelected += actionsList[i].SizeOriginal;
                     }
                 }
-                if (actionsList[i].Doable && actionsList[i].ActionIcon.Equals("ic_error.png")) errors++;
-                if (actionsList[i].Doable && actionsList[i].ActionIcon.Equals("ic_info.png")) info++;
+                if (actionsList[i].ActionIcon.Equals("ic_error.png")) errors++;
+                if (actionsList[i].ActionIcon.Equals("ic_info.png")) info++;
                 if (actionsList[i].Doable && actionsList[i].Selected) selected++;
                 if (actionsList[i].Doable) total++;
             }
@@ -377,22 +396,28 @@ namespace FP_MyBackup
 
         void lockButtons()
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 button_select_destination_folder.IsEnabled = false;
                 button_select_source_folder.IsEnabled = false;
                 button_analyze.IsEnabled = false;
                 button_run.IsEnabled = false;
+                button_stop.IsEnabled = true;
+                button_about.IsEnabled = false;
+                button_exit.IsEnabled = false;
             }));
         }
         void unlockButtons()
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 button_select_destination_folder.IsEnabled = true;
                 button_select_source_folder.IsEnabled = true;
                 button_analyze.IsEnabled = true;
                 button_run.IsEnabled = true;
+                button_stop.IsEnabled = false; 
+                button_about.IsEnabled = true;
+                button_exit.IsEnabled = true;
             }));
         }
 
@@ -402,8 +427,10 @@ namespace FP_MyBackup
         {
             try
             {
-                if (actionsList.Count == 0)
-                    updateStatusLine("Аналіз папки " + sDir + "...");
+                if (!cont)
+                    return;
+                //if(!hasDoableActions())
+                updateStatusLine("Аналіз папки " + sDir + "...");
                 try
                 {//check directory
                     string originalAddress = sDir;
@@ -503,8 +530,10 @@ namespace FP_MyBackup
         {
             try
             {
-                if (actionsList.Count == 0)
-                    updateStatusLine("Аналіз папки " + sDir + "..."); 
+                if (!cont)
+                    return;
+                //if (!hasDoableActions())
+                updateStatusLine("Аналіз папки " + sDir + "..."); 
                 foreach (string d in Directory.GetDirectories(sDir))
                 {
                     DirSearchForRemovingFiles(d);
@@ -574,7 +603,9 @@ namespace FP_MyBackup
 
         private void button_run_Click(object sender, RoutedEventArgs e)
         {
-            checkPaths();
+            cont = true;
+            if (!checkPaths())
+                return;
 
             if (syncThread == null)
             {
@@ -584,10 +615,34 @@ namespace FP_MyBackup
         }
         void setSelected(int actionIndex, bool newValue)
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
             {
                 actionsList[actionIndex].Selected = newValue;
             }));
+        }
+        void setAction(int actionIndex, string newValue, string newFilename)
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+            {
+                actionsList[actionIndex].ActionIcon = newValue;
+                actionsList[actionIndex].Filename = newFilename;
+            }));
+        }
+
+        private void button_stop_Click(object sender, RoutedEventArgs e)
+        {
+            cont = false;
+            button_stop.IsEnabled = false;
+        }
+
+        private void button_exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void button_about_Click(object sender, RoutedEventArgs e)
+        {
+            new About().Show();
         }
 
         private void runRunAsync()
@@ -598,6 +653,8 @@ namespace FP_MyBackup
                 {
                     runAnalyzeAsync();
                 }
+                if (actionsList.Count == 0)
+                    return;
 
                 lockButtons();
 
@@ -609,12 +666,48 @@ namespace FP_MyBackup
                 }
                 addItemToGrid("ic_info.png", "Всього задач: " + doableCount + " шт");
 
-                for (int i = 0; i < actionsList.Count; i++)
+                for (int i = 0; i < actionsList.Count && cont; i++)
                 {
-                    if (actionsList[i].Selected) { 
+                    if (actionsList[i].Doable && actionsList[i].Selected) {
                         //do smth
-                        setSelected(i, false);
-                        updateStatusLineCounters();
+                        try
+                        {
+                            if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_delete.png"))
+                            {
+                                File.Delete(actionsList[i].CopyPath);
+                                setSelected(i, false);
+                            }
+                            if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_copy.png"))
+                            {
+                                File.Copy(actionsList[i].MainPath, actionsList[i].CopyPath);
+                                setSelected(i, false);
+                            }
+                            if (actionsList[i].Type.Equals("ic_file.png") && actionsList[i].ActionIcon.Equals("ic_edit.png"))
+                            {
+                                File.Delete(actionsList[i].CopyPath);
+                                File.Copy(actionsList[i].MainPath, actionsList[i].CopyPath);
+                                setSelected(i, false);
+                            }
+
+                            if (actionsList[i].Type.Equals("ic_folder.png") && actionsList[i].ActionIcon.Equals("ic_delete.png"))
+                            {
+                                Directory.Delete(actionsList[i].CopyPath);
+                                setSelected(i, false);
+                            }
+
+                            if (actionsList[i].Type.Equals("ic_folder.png") && actionsList[i].ActionIcon.Equals("ic_copy.png"))
+                            {
+                                Directory.CreateDirectory(actionsList[i].CopyPath);
+                                setSelected(i, false);
+                            }
+
+
+                            updateStatusLineCounters();
+                        }
+                        catch (Exception e) {
+                            setAction(i, "ic_error.png", e.Message);
+                            updateStatusLineCounters();
+                        }
                     }
                 }
                 refreshGrid();
@@ -628,6 +721,8 @@ namespace FP_MyBackup
                 syncThread = null;
                 unlockButtons();
                 updateStatusLineCounters();
+                if(!cont)
+                    updateStatusLine("Перервано користувачем.");
             }
         }
     }

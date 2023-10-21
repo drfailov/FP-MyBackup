@@ -5,22 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FP_MyBackup"
         mc:Ignorable="d"
-        Title="FP MyBackup" Height="483" Width="934" Icon="/ic_app.png" MinWidth="730" MinHeight="300">
+        Title="FP MyBackup" Height="483" Width="979" Icon="/ic_app.png" MinWidth="730" MinHeight="300">
     <DockPanel>
         <StackPanel DockPanel.Dock="Right">
-            <Button x:Name="button_analyze" ToolTip="Відкрити провідник для вибору папки з якої буде робитись копія" Padding="1,1,1,1" Margin="10,10,10,10" Click="button_analyze_Click">
+            <Button x:Name="button_analyze" ToolTip="Провести аналіз вмісту двох обраних папок та створити список змін які потрібно внести в папку копії. По натисканню на цю кнопку ніяких змін у вміст папок внесено не буле." Padding="1,1,1,1" Margin="10,10,10,10" Click="button_analyze_Click">
                 <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
                     <Image Height="20" Width="20" Source="/ic_serach.png" Margin="0,0,5,0"/>
                     <Label Content="Аналіз" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </Button>
-            <Button x:Name="button_run" ToolTip="Відкрити провідник для вибору папки з якої буде робитись копія" Padding="1,1,1,1" Margin="10,0,10,10" Click="button_run_Click">
+            <Button x:Name="button_run" ToolTip="Виконати задачі, список яких було створено в процесі аналізу. Якщо аналіз не проводився, він буде виконаний перед змінами в файли." Padding="1,1,1,1" Margin="10,0,10,10" Click="button_run_Click">
                 <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
                     <Image Height="20" Width="20" Source="/ic_run.png" Margin="0,0,5,0"/>
                     <Label Content="Запустити" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
                 </StackPanel>
             </Button>
+            <Button x:Name="button_stop" ToolTip="Зупинити задачі, які зараз виконуються." Padding="1,1,1,1" Margin="10,0,10,10" Click="button_stop_Click" IsEnabled="False">
+                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                    <Image Height="20" Width="20" Source="/ic_stop.png" Margin="0,0,5,0"/>
+                    <Label Content="Стоп" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Button>
             <Image Height="100" Width="100"/>
+            <Button x:Name="button_about" ToolTip="Відкрити вікно з інформацією про програму." Padding="1,1,1,1" Margin="10,0,10,10" Click="button_about_Click">
+                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                    <Image Height="20" Width="20" Source="/ic_info.png" Margin="0,0,5,0"/>
+                    <Label Content="Про програму" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="button_exit" ToolTip="Закрити програму." Padding="1,1,1,1" Margin="10,0,10,10" Click="button_exit_Click">
+                <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,3,10,3">
+                    <Image Height="20" Width="20" Source="/ic_exit.png" Margin="0,0,5,0"/>
+                    <Label Content="Вийти" Padding="0,0,0,0" VerticalContentAlignment="Center"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         <StackPanel DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="10,10,10,10">

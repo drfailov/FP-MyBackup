@@ -1,0 +1,23 @@
+﻿<Window x:Class="FP_MyBackup.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FP_MyBackup"
+        mc:Ignorable="d"
+        Title="Про програму" Height="462" Width="838">
+    <Grid>
+        <Image HorizontalAlignment="Left" Height="100" Margin="10,10,0,0" VerticalAlignment="Top" Width="100" Source="/ic_app.png"/>
+        <RichTextBox x:Name="richtextbox" Margin="127,52,10,49">
+            <FlowDocument>
+                <Paragraph>
+                    <Run Text="RichTextBox"/>
+                </Paragraph>
+            </FlowDocument>
+        </RichTextBox>
+        <Button x:Name="button_exit" Content="Закрити це вікно" Margin="0,0,10,10" HorizontalAlignment="Right" Width="117" Height="26" VerticalAlignment="Bottom" Click="button_exit_Click" />
+        <Label x:Name="labelName_" Content="FP MyBackup" HorizontalAlignment="Left" Margin="127,10,0,0" VerticalAlignment="Top" FontSize="20"/>
+        <Label Content="Автор: Dr.Failov.    Розроблено в Україні." HorizontalAlignment="Left" Margin="10,0,0,10" Height="26" VerticalAlignment="Bottom"/>
+
+    </Grid>
+</Window>
