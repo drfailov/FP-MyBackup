@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ic_app.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -64,6 +67,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FolderPicker.cs" />
+    <Compile Include="IniFile.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -109,6 +113,39 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ic_serach.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_run.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_app.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_app.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_info.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ic_edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
